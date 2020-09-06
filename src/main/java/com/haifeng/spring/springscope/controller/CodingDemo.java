@@ -1,13 +1,13 @@
 package com.haifeng.spring.springscope.controller;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 
 public class CodingDemo {
 
     public static void main(String[] args) throws IOException {
 
+        /*demo.txt编码格式为GBK*/
         FileInputStream inputStream = new FileInputStream("d:\\demo.txt");
 
         int buf;
@@ -36,10 +36,16 @@ public class CodingDemo {
         System.out.println(new String(byteBuffer));
 
         /*将读入的数组decode 以GBK字符集*/
-        System.out.println(new String(byteBuffer,"GBK"));
+        System.out.println(new String(byteBuffer, "GBK"));
 
         /*将读入的数组decode 以GB2312字符集*/
         System.out.println(new String(byteBuffer, "GB2312"));
+
+        /*以字符流从文件读入数据*/
+        readByCharStream();
+
+        /*以字符流将数据写入文件*/
+        writeByCharStream();
     }
 
     /**
@@ -56,6 +62,30 @@ public class CodingDemo {
         b[2] = (byte) (value >> 8 & 0xff);
         b[3] = (byte) (value & 0xff);
         return b;
+    }
+
+    public static void readByCharStream() throws IOException {
+        /*以系统默认的字符集读入 在IDEA中即为项目编码*/
+        /*InputStreamReader reader = new InputStreamReader(
+                new FileInputStream("d:\\demo.txt"));*/
+        /*以GBK字符集读入*/
+        InputStreamReader reader = new InputStreamReader(
+                new FileInputStream("d:\\demo.txt"),"GBK");
+        int ch;
+        while ((ch = reader.read()) != -1) {
+            System.out.println(ch);
+            System.out.println((char) ch);
+        }
+        reader.close();
+    }
+
+    public static void writeByCharStream() throws IOException {
+        /*以GBK编码字符*/
+        OutputStreamWriter writer = new OutputStreamWriter(
+                new FileOutputStream("d:\\demo2.txt"), "GBK");
+        writer.write("我们");
+        writer.flush();
+        writer.close();
     }
 
 }
